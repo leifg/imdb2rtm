@@ -1,0 +1,8 @@
+<h1>RTM-Items eingeben</h1>
+<%=
+if !@authenticated
+	"VOLL KEIN ZUGRIFF"
+else
+	@output_string
+end
+%>

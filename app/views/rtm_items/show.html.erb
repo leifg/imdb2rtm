@@ -1,0 +1,6 @@
+<h1>Hier sind deine Items</h1>
+Here we go:<br/><%= 
+if @items != nil
+	@items.each {|x| x.to_s.concat"<br/>" } 
+end 
+%>

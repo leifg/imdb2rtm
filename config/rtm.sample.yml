@@ -1,0 +1,5 @@
+# this file needs to be copied as rtm.yml. You have to provide your api-key and your shared secret
+# refer to https://www.rememberthemilk.com/services/api/
+
+api_key: <your api key>
+shared_secret: <your shared secret>

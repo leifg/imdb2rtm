@@ -1,0 +1,4 @@
+== Overview
+this ruby script is intended to use a todo list of the famous web-service RememberTheMilk (http://www.rememberthemilk.com) and interpret every task as a movie on IMDB (imdb.com).
+Every task is looked up on imdb. If a matching title is found, the URL of movie on IMDB will be set as URL on the task.
+Furthermore, the rating of the movie will be added to the title.

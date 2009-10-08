@@ -1,0 +1,12 @@
+<h1>RTM-Items eingeben</h1>
+<% form_tag(:controller => "rtm_items", :action => "show") do %>
+	FROB: <%= @frob %><br />
+	<%= link_to 'hier klicken', @uri, :target => '_blank' %><br />
+  <%= submit_tag("losgehts") %><br />
+  
+  <% params.each do |key, value| %>
+  		Key: 	<%= key %><br />
+		Value:  <%= value%><br />
+<% end %>
+  DER TOKEN: <%=@token%>
+<% end %>
