@@ -1,8 +1,11 @@
-<h1>RTM-Items eingeben</h1>
-<%=
+<h1>Select list for RTM Items</h1>
+<%
 if !@authenticated
-	"VOLL KEIN ZUGRIFF"
-else
-	select(nil, nil, @list_names )
-end
-%>
+	"ACCESS DENIED"
+
+else %>
+	<% form_tag(:controller => "rtm_items", :action => "show") do %>
+		<%= select("lists", "selected", @list_names) %>
+		<%= submit_tag("imdb the tasks") %>
+	<% end %>
+<% end %>

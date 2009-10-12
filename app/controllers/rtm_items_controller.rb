@@ -1,32 +1,32 @@
 require 'rtmapi'
 require 'rubygems'
 require 'yaml'
+require 'imdb2rtm_command'
 
 class RtmItemsController < ApplicationController
   
-  @@app_config = YAML::load_file('config/rtm.yml')
-  
-  @@api_key = @@app_config['api_key']
-  @@shared_secret = @@app_config['shared_secret']
+  RememberTheMilkHash.strict_keys = false
   
   def index
-    @rtm = RememberTheMilk.new(@@api_key, @@shared_secret)
-   
+    @rtm = getRtmInstance
     uri = @rtm.auth_url 
     
-  if !params[:frob]
-    redirect_to uri
+    if !params[:frob]
+      redirect_to uri
     else
       begin
         token = @rtm.auth.getToken(:frob => params[:frob])
-        @rtm.auth.checkToken(:auth_token => token.token)
+        session[:rtm_auth_token] = token
+        
         @authenticated = true
         
-        @rtm.auth_token =  token.token
+        @rtm.auth_token = token.token
         @lists = @rtm.lists.getList
-        
+                
         @list_names = Array.new
+        
         @lists.each { |id, data| @list_names << [data[:name], id] }
+        @list_names.sort!
         
       rescue RememberTheMilkAPIError => autherror
         puts autherror
@@ -36,10 +36,21 @@ class RtmItemsController < ApplicationController
   end
   
   def show
-    res = RTM::Auth::GetToken.new(@frob).invoke
-    @token = res[:token]
-    lists = RTM::Lists::GetList.new(token).invoke
-    lists.each { |l| puts l.name } 
+    
+    if params and params[:lists] and params[:lists][:selected]
+      @authenticated = true
+      selected_list_id = params[:lists][:selected]
+      
+      session[:task_changes] = Imdb2RtmCommand.new(getRtmInstance(session[:rtm_auth_token]), selected_list_id).do
+    end
+    
+    puts @lists
   end
-
+  
+  def undo
+    task_changes = session[:task_changes]
+    
+    Imdb2RtmCommand.new(getRtmInstance(session[:rtm_auth_token]), nil, task_changes).undo
+  end
+  
 end
